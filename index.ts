@@ -309,8 +309,8 @@ class CategoryShortcuts extends PureComponent<{
   onPressCategory?: (cat: string) => void;
 }> {
   public render() {
+    // Scroll doesn't work on react-native-web due to bad FlatList support
     if (Platform.OS === 'web') {
-      // Scroll doesn't work on react-native-web due to bad FlatList support
       return $(View, {style: styles.shortcutsContainer});
     }
 
@@ -497,9 +497,11 @@ export default class EmojiPicker extends PureComponent<
   };
 
   private onPressCategory = (category: string) => {
+    // Scroll doesn't work on react-native-web due to bad FlatList support
+    if (Platform.OS === 'web') return;
+
     const index = CATEGORIES.indexOf(category);
-    if (index >= 0 && Platform.OS !== 'web') {
-      // Scroll doesn't work on react-native-web due to bad FlatList support
+    if (index >= 0) {
       this.ref.current?.scrollToIndex({
         animated: true,
         index,
@@ -578,9 +580,7 @@ export default class EmojiPicker extends PureComponent<
 
       $(
         TouchableWithoutFeedback,
-        {
-          onPress: this.onPressBackground,
-        },
+        {onPress: this.onPressBackground},
         $(View, {style: [styles.background, backgroundStyle]}),
       ),
     );

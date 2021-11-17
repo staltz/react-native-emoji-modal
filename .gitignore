@@ -1,0 +1,8 @@
+/.vscode
+/node_modules
+index.d.ts
+index.js
+index.js.map
+pnpm-lock.yaml
+package-lock.json
+emoji.json

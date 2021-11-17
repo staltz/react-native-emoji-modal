@@ -1,0 +1,34 @@
+{
+  "name": "react-native-emoji-modal",
+  "version": "0.1.0",
+  "description": "Emoji picker for React Native",
+  "author": "Andre 'Staltz' Medeiros <contact@staltz.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "emoji.json",
+    "index.js",
+    "index.d.ts",
+    "index.js.map"
+  ],
+  "dependencies": {
+    "just-group-by": "^2.0.1",
+    "just-map-values": "^3.0.2",
+    "react": ">=17.0.0",
+    "react-native": ">=0.64.0",
+    "react-native-vector-icons": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/react-native-vector-icons": "^6.4.10",
+    "@types/react-native": "^0.66.4",
+    "@types/react": "^17.0.35",
+    "emoji-datasource": "7.0.2",
+    "just-pick": "^4.0.1",
+    "just-sort-by": "^3.0.1",
+    "node-fetch": "2.x",
+    "typescript": "^4.4.4"
+  },
+  "scripts": {
+    "compile": "node scripts/fetch && tsc"
+  }
+}

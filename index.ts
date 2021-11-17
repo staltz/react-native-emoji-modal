@@ -14,13 +14,13 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const groupBy = require('just-group-by');
 const mapValues = require('just-map-values');
+const noop = () => {};
 
 interface Emoji {
   category: string;
   unified: string;
   short_name: string;
   added_in: string;
-
   _score: number;
 }
 
@@ -381,7 +381,11 @@ export default class EmojiPicker extends PureComponent<
   private emojisByCategory: Record<string, Array<string>> = {};
   private filteredEmojis: Array<Emoji> = [];
   private layouts: Array<{length: number; offset: number; index: number}>;
-  private ref: RefObject<FlatList<unknown>> = createRef();
+  private readonly ref: RefObject<FlatList<unknown>> = createRef();
+  private readonly viewabilityConfig = {
+    minimumViewTime: 1,
+    viewAreaCoveragePercentThreshold: 51,
+  };
 
   private prepareEmojisByCategory() {
     const emojiDB = require('./emoji.json') as Array<Emoji>;
@@ -493,6 +497,10 @@ export default class EmojiPicker extends PureComponent<
     }
   };
 
+  private onPressBackground = () => {
+    this.props.onPressOutside?.();
+  };
+
   getItemLayout = (data: Array<unknown> | null | undefined, index: number) => {
     if (data?.[0] === null) return {length: TOTAL_HEIGHT, offset: 0, index: 0};
     return this.layouts[index];
@@ -505,18 +513,27 @@ export default class EmojiPicker extends PureComponent<
   };
 
   public render() {
-    const {searchResults} = this.state;
+    const {
+      modalStyle,
+      backgroundStyle,
+      containerStyle,
+      scrollStyle,
+      searchStyle,
+      shortcutColor,
+      activeShortcutColor,
+    } = this.props;
+    const {searchResults, activeCategory} = this.state;
 
     return $(
       View,
-      {style: [styles.modal, this.props.modalStyle]},
+      {style: [styles.modal, modalStyle]},
       $(
         View,
-        {style: [styles.container, this.props.containerStyle]},
+        {style: [styles.container, containerStyle]},
         $(SearchField, {
-          customStyle: this.props.searchStyle,
+          customStyle: searchStyle,
           onChanged: this.onSearchChanged,
-          iconColor: this.props.shortcutColor,
+          iconColor: shortcutColor,
         }),
         $(
           View,
@@ -527,26 +544,23 @@ export default class EmojiPicker extends PureComponent<
             horizontal: false,
             numColumns: 1,
             onEndReachedThreshold: Platform.OS === 'web' ? 1 : 1000,
-            onScrollToIndexFailed: () => {},
-            style: [styles.scroller, this.props.scrollStyle],
+            onScrollToIndexFailed: noop,
+            style: [styles.scroller, scrollStyle],
             initialNumToRender: 1,
             maxToRenderPerBatch: 1,
             keyExtractor: (category) => category as string,
             getItemLayout: this.getItemLayout,
             onViewableItemsChanged: this.onViewableItemsChanged,
-            viewabilityConfig: {
-              minimumViewTime: 1,
-              viewAreaCoveragePercentThreshold: 51,
-            },
+            viewabilityConfig: this.viewabilityConfig,
             renderItem: this.renderItem,
           }),
         ),
         this.state.searchResults.length > 0
           ? null
           : $(CategoryShortcuts, {
-              activeCategory: this.state.activeCategory,
-              iconColor: this.props.shortcutColor,
-              activeIconColor: this.props.activeShortcutColor,
+              activeCategory: activeCategory,
+              iconColor: shortcutColor,
+              activeIconColor: activeShortcutColor,
               onPressCategory: this.onPressCategory,
             }),
       ),
@@ -554,11 +568,9 @@ export default class EmojiPicker extends PureComponent<
       $(
         TouchableWithoutFeedback,
         {
-          onPress: () => {
-            this.props.onPressOutside?.();
-          },
+          onPress: this.onPressBackground,
         },
-        $(View, {style: [styles.background, this.props.backgroundStyle]}),
+        $(View, {style: [styles.background, backgroundStyle]}),
       ),
     );
   }

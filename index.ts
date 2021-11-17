@@ -302,23 +302,27 @@ class SearchField extends PureComponent<{
 }
 
 class CategoryShortcuts extends PureComponent<{
-  onPressCategory?: (cat: string) => void;
+  show: boolean;
   activeCategory: string;
   iconColor?: any;
   activeIconColor?: any;
+  onPressCategory?: (cat: string) => void;
 }> {
   public render() {
     if (Platform.OS === 'web') {
       // Scroll doesn't work on react-native-web due to bad FlatList support
       return $(View, {style: styles.shortcutsContainer});
-    } else {
-      const {onPressCategory, iconColor, activeCategory, activeIconColor} =
-        this.props;
-      return $(
-        View,
-        {style: styles.shortcutsContainer},
-        ...CATEGORIES.map((category) =>
-          $(
+    }
+
+    const {onPressCategory, iconColor, activeCategory, activeIconColor, show} =
+      this.props;
+
+    return $(
+      View,
+      {style: styles.shortcutsContainer},
+      ...CATEGORIES.map((category) => {
+        if (show) {
+          return $(
             TouchableOpacity,
             {onPress: () => onPressCategory?.(category)},
 
@@ -332,10 +336,18 @@ class CategoryShortcuts extends PureComponent<{
                   : iconColor ?? '#bcbcbc',
               name: categoryToIcon(category),
             }),
-          ),
-        ),
-      );
-    }
+          );
+        } else {
+          return $(Icon, {
+            key: category,
+            size: SHORTCUT_SIZE,
+            style: styles.shortcut,
+            name: categoryToIcon(category),
+            color: 'transparent',
+          });
+        }
+      }),
+    );
   }
 }
 
@@ -555,14 +567,13 @@ export default class EmojiPicker extends PureComponent<
             renderItem: this.renderItem,
           }),
         ),
-        this.state.searchResults.length > 0
-          ? null
-          : $(CategoryShortcuts, {
-              activeCategory: activeCategory,
-              iconColor: shortcutColor,
-              activeIconColor: activeShortcutColor,
-              onPressCategory: this.onPressCategory,
-            }),
+        $(CategoryShortcuts, {
+          show: searchResults.length === 0,
+          activeCategory: activeCategory,
+          iconColor: shortcutColor,
+          activeIconColor: activeShortcutColor,
+          onPressCategory: this.onPressCategory,
+        }),
       ),
 
       $(

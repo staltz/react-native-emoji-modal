@@ -361,7 +361,7 @@ function normalize(str: string) {
     .trim();
 }
 
-export default class EmojiPicker extends PureComponent<
+export default class EmojiModal extends PureComponent<
   {
     onEmojiSelected: (e: string | null) => void;
     onPressOutside?: () => void;
@@ -429,7 +429,7 @@ export default class EmojiPicker extends PureComponent<
     );
   }
 
-  private calculateLayouts(props: EmojiPicker['props']) {
+  private calculateLayouts(props: EmojiModal['props']) {
     let heightsSoFar = 0;
     this.layouts = CATEGORIES.map((category, i) => {
       const numEmojis = this.emojisByCategory[category].length;

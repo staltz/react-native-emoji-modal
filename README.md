@@ -61,6 +61,10 @@ import EmojiModal from 'react-native-emoji-modal';
 | `backgroundStyle`     | Custom style for the background of the modal                          | ViewStyle     | false    |                                                                                                                                              |
 | `modalStyle`          | Custom style for top-level container                                  | ViewStyle     | false    |                                                                                                                                              |
 
+## Support us!
+
+This library was created for [Manyverse](https://manyver.se) and we're very thankful for our [backers on OpenCollective](https://opencollective.com/manyverse), and we need more donations! :pray:
+
 ## License
 
 [MIT](LICENSE)

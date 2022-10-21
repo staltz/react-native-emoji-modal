@@ -13,7 +13,7 @@ This is a rewrite of [react-native-emoji-picker](https://github.com/staltz/react
 - Category shortcuts
 - Supports iOS
 - Supports Android
-  - It's aware of Android versions and thier availability of emojis
+  - It's aware of Android versions and their availability of emojis
 - Supports react-native-web
   - Except for category shortcuts (PRs welcome to fix this!)
 - Written in TypeScript

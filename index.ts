@@ -12,8 +12,8 @@ import {
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import groupBy from 'just-group-by';
-import mapValues from 'just-map-values';
+const groupBy = require('just-group-by/index.js');
+const mapValues = require('just-map-values/index.js');
 const noop = () => {};
 
 interface Emoji {
